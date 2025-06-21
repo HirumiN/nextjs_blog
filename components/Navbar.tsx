@@ -32,7 +32,7 @@ const Navbar = async () => {
                                 </button>
                             </form>
 
-                            <Link href={`/user/${session.id}`} className="flex items-center gap-2">
+                            <Link href={`/user/${session.user.id}`} className="flex items-center gap-2">
                                 <span className="font-semibold">{session.user.name}</span>
                             </Link>
                         </>
