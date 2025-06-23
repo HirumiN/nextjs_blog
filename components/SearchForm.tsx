@@ -11,8 +11,8 @@
 import Form from 'next/form' 
 
 // Mengimpor komponen lain yang kemungkinan berfungsi sebagai tombol reset/hapus.
-import SearchFormReset from './SearchFormReset';
 import { Search } from 'lucide-react';
+import SearchFormReset from './SearchFormReset';
 
 // Mendefinisikan komponen React bernama 'SearchForm'.
 // Komponen ini menerima satu prop opsional bernama 'query' yang bertipe string.

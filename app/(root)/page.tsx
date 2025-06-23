@@ -1,4 +1,5 @@
 import SearchForm from "@/components/SearchForm";
+import StartupCard from "@/components/StartupCard";
 
 // (Penjelasan di luar kode)
 // File ini mendefinisikan komponen Halaman Utama (Home) untuk aplikasi Next.js
@@ -28,8 +29,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
   // sehingga aman untuk digunakan di komponen lain.
   const query = (await searchParams).query || '';
 
-  // --- PENJELASAN BAGIAN 'query' SELESAI ---
-
+  const posts = [{
+    _createdAt: new Date(),
+    _id: '1',
+    views: 100,
+    author: { _id: '1' , name: 'John Doe', image: 'https://placehold.co/48x48' },
+    description: 'This is a sample startup pitch description.',
+    image: 'https://placehold.co/800?text=Hello+World&font=roboto',
+    category: 'Tech',
+    title: 'Sample Startup Pitch',
+  }]
   return (
     <>
       <section className="pink_container">
@@ -50,6 +59,24 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
           langsung terisi dengan tulisan "AI".
         */}
         <SearchForm query={query} />
+      </section>
+      <section className="section_container">
+        <p className="text-30-semibold">
+          {query
+            ? `Showing results for "${query}"` : 'All startups'}
+        </p>
+        <ul className="mt-7 card_grid">
+          {posts?.length > 0 ? (
+            posts.map((post: StartupCardType, index: number) => (
+              <StartupCard
+                key={post?._id}
+                post={post}
+                index={index} />
+            ))
+          ) : (
+            <p className="no-results">No results found</p>
+          )}
+        </ul>
       </section>
     </>
   );
