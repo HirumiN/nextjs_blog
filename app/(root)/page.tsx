@@ -1,7 +1,7 @@
 import SearchForm from "@/components/SearchForm";
 import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
-import { STARTUP_QUERY } from "@/lib/query";
-import { client } from "@/sanity/lib/client";
+import { STARTUP_QUERY } from "@/sanity/lib/query";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 
 // (Penjelasan di luar kode)
 // File ini mendefinisikan komponen Halaman Utama (Home) untuk aplikasi Next.js
@@ -9,29 +9,11 @@ import { client } from "@/sanity/lib/client";
 // memproses 'searchParams' yang datang sebagai sebuah Promise.
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ query?: string }> }) {
-  // --- PENJELASAN BAGIAN 'query' DIMULAI DI SINI ---
-
-  // 1. Mengambil Nilai dari URL Query Parameter
-  //
-  // `searchParams` adalah sebuah prop khusus yang disediakan oleh Next.js di dalam App Router.
-  // Prop ini berisi parameter query dari URL. Contoh: jika URL adalah `/home?query=startup`,
-  // maka `searchParams` akan berisi objek `{ query: 'startup' }`.
-  //
-  // Di Next.js, `searchParams` diberikan sebagai sebuah 'Promise'. Oleh karena itu, kita
-  // harus menggunakan keyword `await` untuk "menunggu" dan mendapatkan objek yang sebenarnya.
-  // `(await searchParams)` akan menghasilkan objek seperti `{ query: 'nilai_pencarian' }`.
-  //
-  // `.query` kemudian digunakan untuk mengakses properti 'query' dari objek tersebut.
-  //
-  // `|| ''` (Operator OR) digunakan sebagai nilai default.
-  // - Jika `(await searchParams).query` ada isinya (misalnya, 'startup'), maka `query` akan bernilai 'startup'.
-  // - Jika `(await searchParams).query` tidak ada (misalnya, URL hanya `/home` tanpa parameter),
-  //   maka hasilnya akan `undefined`. Operator OR akan memberikan nilai fallback, yaitu string kosong `''`.
-  // Ini memastikan variabel `query` selalu berupa string dan tidak pernah `undefined`,
-  // sehingga aman untuk digunakan di komponen lain.
+ 
   const query = (await searchParams).query || '';
+  const params = {search : query || null};
+  const {data : posts} = await sanityFetch({query: STARTUP_QUERY, params});
 
-  const posts = await client.fetch(STARTUP_QUERY);
 
   console.log(JSON.stringify(posts, null, 2));
 
@@ -75,6 +57,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
           )}
         </ul>
       </section>
+      <SanityLive />
     </>
   );
 }
